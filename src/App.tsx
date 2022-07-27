@@ -18,6 +18,24 @@ function App() {
   // Use initialEmails for state
   const [emails, setEmails] = useState(initialEmails);
 
+  function toggleRead(email: Email) {
+    const emailsCopy = structuredClone(emails);
+
+    const targetEmail = emailsCopy.find((target) => target.id === email.id);
+    targetEmail.read = !targetEmail.read;
+
+    setEmails(emailsCopy);
+  }
+
+  function toggleStarred(email: Email) {
+    const emailsCopy = structuredClone(emails);
+
+    const targetEmail = emailsCopy.find((target) => target.id === email.id);
+    targetEmail.starred = !targetEmail.starred;
+
+    setEmails(emailsCopy);
+  }
+
   return (
     <div className="app">
       <Header />
@@ -53,12 +71,19 @@ function App() {
         <div className="emails">
           <ul>
             {emails.map((email) => (
-              <li
-                className={email.read ? "email read" : "email unread"}
-              >
-                <input type="checkbox" checked={email.read} />
+              <li className={email.read ? "email read" : "email unread"}>
                 <input
                   type="checkbox"
+                  onClick={() => {
+                    toggleRead(email);
+                  }}
+                  checked={email.read}
+                />
+                <input
+                  type="checkbox"
+                  onClick={() => {
+                    toggleStarred(email);
+                  }}
                   className="star-checkbox"
                   checked={email.starred}
                 />
